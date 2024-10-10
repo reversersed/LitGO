@@ -1,5 +1,10 @@
 run: checkout prod
 
+i:
+	@git submodule update --init
+	@cd ./frontend && npm i
+	@cd ./server && make i
+
 checkout:
 	@cd ./frontend && ng test
 	@cd ./server && make i gen check test
