@@ -11,14 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4 #Checkout Repo
+        with:
+          submodules: recursive
       - uses: actions/setup-node@v4 #Setup Node
         with:
           node-version: 20
       - uses: browser-actions/setup-edge@v1
       - name: Run Karma Tests
         run: |
-          npm i
-          npm run test
+          cd ./frontend && npm i && npm run test
 
   server-lint:
     runs-on: ubuntu-latest
