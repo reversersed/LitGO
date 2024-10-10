@@ -1,6 +1,7 @@
 run: checkout prod
 
 checkout:
+	@cd ./frontend && ng test
 	@cd ./server && make i gen check test
 
 start:

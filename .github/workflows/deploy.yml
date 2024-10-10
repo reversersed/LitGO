@@ -7,24 +7,37 @@ on:
     branches: ["main"]
 
 jobs:
-  lint:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v4
-          with:
-            submodules: recursive
-  
-        - name: Set up Go
-          uses: actions/setup-go@v5
-          with:
-            go-version: "1.22.5"
-            cache: false
-  
-        - name: Lint
-          run: | 
-            cd ./server && make check
-  test:
+  frontend-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4 #Checkout Repo
+      - uses: actions/setup-node@v4 #Setup Node
+        with:
+          node-version: 20
+      - uses: browser-actions/setup-edge@v1
+      - name: Run Karma Tests
+        run: |
+          npm i
+          npm run test
+
+  server-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.5"
+          cache: false
+
+      - name: Lint
+        run: |
+          cd ./server && make check
+  server-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,15 +54,15 @@ jobs:
       - name: Test
         run: |
           cd ./server && make test-unit
-        
+
   deploy:
-    needs: [test,lint]
+    needs: [frontend-test, server-test, server-lint]
     if: ${{ success() }}
     runs-on: ubuntu-latest
     steps:
-     - name: Deploy by SSH        
-       uses: appleboy/ssh-action@v1.0.3
-       with:
+      - name: Deploy by SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           password: ${{secrets.SSH_PASSWORD}}
