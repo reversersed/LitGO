@@ -1,0 +1,9 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/reversersed/LitGO-frontend
+[submodule "server"]
+	path = server
+	url = https://github.com/reversersed/LitGO-backend
+[submodule "proto"]
+	path = proto
+	url = https://github.com/reversersed/LitGO-proto

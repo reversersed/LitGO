@@ -1,0 +1,60 @@
+name: Deploy workflow
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+          with:
+            submodules: recursive
+  
+        - name: Set up Go
+          uses: actions/setup-go@v5
+          with:
+            go-version: "1.22.5"
+            cache: false
+  
+        - name: Lint
+          run: | 
+            cd ./server && make check
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22.5"
+          cache: false
+
+      - name: Test
+        run: |
+          cd ./server && make test-unit
+        
+  deploy:
+    needs: [test,lint]
+    if: ${{ success() }}
+    runs-on: ubuntu-latest
+    steps:
+     - name: Deploy by SSH        
+       uses: appleboy/ssh-action@v1.0.3
+       with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          password: ${{secrets.SSH_PASSWORD}}
+          command_timeout: 60m
+          script: |
+            cd ${{secrets.PROJECT_FOLDER}};
+            git pull;
+            make prod;
