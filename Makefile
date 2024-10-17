@@ -23,8 +23,7 @@ dev:
 	@cd ./frontend && npm run dev
 
 prod: 
-	@cd ./server && make i gen
-	@make start
+	@cd ./server && make gen && cd .. && make start
 
 ngrok:
 	@cd ../ngrok && ngrok http 8080 --scheme http,https
