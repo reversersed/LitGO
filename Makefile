@@ -19,7 +19,7 @@ down:
 	@docker compose -f ./server/docker-compose.yml -f ./frontend/docker-compose.prod.yml down
 
 dev:
-	@cd ./server && make i gen start
+	@make start
 	@cd ./frontend && npm run dev
 
 prod: 
