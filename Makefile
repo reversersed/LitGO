@@ -10,7 +10,7 @@ checkout:
 	@cd ./server && make i gen check test
 
 start:
-	@docker compose -f ./server/docker-compose.yml -f ./frontend/docker-compose.prod.yml up --build --timestamps --wait --wait-timeout 1800 --remove-orphans -d
+	@docker compose -f ./server/docker-compose.yml -f ./frontend/docker-compose.prod.yml up  --build --timestamps --wait --wait-timeout 1800 --remove-orphans -d
 
 stop:
 	@docker compose -f ./server/docker-compose.yml -f ./frontend/docker-compose.prod.yml stop
@@ -26,4 +26,4 @@ prod:
 	@cd ./server && make gen && cd .. && make start
 
 ngrok:
-	@cd ../ngrok && ngrok http 8080 --scheme http,https
+	@cd ../ngrok && ngrok http 80 --scheme http,https
