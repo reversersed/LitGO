@@ -7,6 +7,10 @@ i:
 
 checkout:
 	@cd ./frontend && ng test
+	@cd ./server && make i gen test-verbose check
+
+test:
+	@cd ./frontend && ng test
 	@cd ./server && make i gen test check
 
 start:
