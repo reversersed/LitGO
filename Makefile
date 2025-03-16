@@ -3,15 +3,19 @@ run: checkout prod
 i:
 	@git submodule update --init
 	@cd ./frontend && npm i
-	@cd ./server && git submodule update --init && make i
+	@cd ./server && git submodule update --init && make i clean
+
+clean:
+	@cd ./server && make clean
+	@cd ./frontend && npm run gen
 
 checkout:
 	@cd ./frontend && npm run test
-	@cd ./server && make i gen test-verbose check
+	@cd ./server && make i clean gen test-verbose check
 
 test:
 	@cd ./frontend && npm run test
-	@cd ./server && make i gen test check
+	@cd ./server && make i clean gen test check
 
 start:
 	@docker compose -f ./server/docker-compose.yml -f ./frontend/docker-compose.prod.yml up  --build --timestamps --wait --wait-timeout 1800 --remove-orphans -d
@@ -22,12 +26,12 @@ stop:
 down:
 	@docker compose -f ./server/docker-compose.yml -f ./frontend/docker-compose.prod.yml down
 
-dev:
+dev: clean
 	@make start
 	@cd ./frontend && npm run dev
 
-prod: 
-	@cd ./server && make gen && cd .. && make start
+prod: clean
+	@make start
 
 ngrok:
 	@cd ../ngrok && ngrok http 80
