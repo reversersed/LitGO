@@ -3,7 +3,7 @@ run: checkout prod
 i:
 	@git submodule update --init
 	@cd ./frontend && npm i
-	@cd ./server && make i
+	@cd ./server && git submodule update --init && make i
 
 checkout:
 	@cd ./frontend && ng test
