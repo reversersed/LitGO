@@ -6,11 +6,11 @@ i:
 	@cd ./server && git submodule update --init && make i
 
 checkout:
-	@cd ./frontend && ng test
+	@cd ./frontend && npm run test
 	@cd ./server && make i gen test-verbose check
 
 test:
-	@cd ./frontend && ng test
+	@cd ./frontend && npm run test
 	@cd ./server && make i gen test check
 
 start:
