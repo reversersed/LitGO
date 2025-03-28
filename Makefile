@@ -33,5 +33,5 @@ dev: clean
 prod: clean
 	@make start
 
-ngrok:
-	@cd ../ngrok && ngrok http 80
+tuna:
+	@tuna http 80
