@@ -27,7 +27,7 @@ down:
 	@docker compose -f ./server/docker-compose.yml -f ./frontend/docker-compose.prod.yml down
 
 dev: clean
-	@make start
+	@cd ./server && make start
 	@cd ./frontend && npm run dev
 
 prod: clean
